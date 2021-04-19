@@ -4,9 +4,26 @@ import {logger} from "./utils/logger"
 import {MQTT} from "./mqtt"
 
 import {getRoutes} from "./routes"
+import {ApolloServer, gql} from "apollo-server-express"
 
-const startServer = ({port = process.env.PORT} = {}) => {
+const startServer = async ({port = process.env.PORT} = {}) => {
+  const typeDefs = gql`
+    type Query {
+      hello: String
+    }
+  `
+  // Provide resolver functions for your schema fields
+  const resolvers = {
+    Query: {
+      hello: () => "Hello world!",
+    },
+  }
+
+  const gqlServer = new ApolloServer({typeDefs, resolvers})
+  await gqlServer.start()
+
   const app = express()
+  gqlServer.applyMiddleware({app})
 
   app.use("/api", getRoutes())
 
@@ -15,9 +32,10 @@ const startServer = ({port = process.env.PORT} = {}) => {
   MQTT().init()
 
   return new Promise((resolve) => {
-    const server = app.listen(port, () => {
+    const server = app.listen(process.env.PORT || 4000, () => {
       // @ts-ignore
       logger.info(`Listening on port ${server.address().port}`)
+      logger.info(`🚀 Server ready at http://localhost:4000${gqlServer.graphqlPath}`)
       const originalClose = server.close.bind(server)
       // @ts-ignore
       server.close = () => {
