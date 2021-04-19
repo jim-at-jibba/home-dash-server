@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
     "moduleResolution": "node",
     "strict": true
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "./src/start.ts"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["./src/start.ts"]
 }
