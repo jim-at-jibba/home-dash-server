@@ -8,6 +8,7 @@
     "build": "shx rm -rf dist/ && tsc -p .",
     "start": "node dist/src/index.js",
     "tsc": "tsc",
+    "test": "jest",
     "check-formatting": "prettier --config .prettierrc.json '**/*.{ts, tsx}' '**/*.{ts, tsx}' --list-different",
     "prettier-format": "prettier --config .prettierrc.json 'src/**/*.{ts, tsx}' '**/*.{ts, tsx}' --write",
     "lint": "npm run lint-src && npm run tsc",
@@ -37,10 +38,12 @@
     "type-graphql": "^1.1.1"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.22",
     "@types/node": "^14.14.41",
     "@types/pino": "^6.3.6",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "apollo-server-testing": "^2.23.0",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-standard": "^16.0.2",
@@ -52,6 +55,7 @@
     "pino-pretty": "^4.7.1",
     "prettier": "2.2.1",
     "pretty-quick": "^3.1.0",
+    "ts-jest": "^26.5.5",
     "typescript": "^4.2.4"
   }
 }
