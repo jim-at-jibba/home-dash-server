@@ -1,25 +1,21 @@
+import "reflect-metadata"
 import express, {NextFunction, Request, Response} from "express"
 import "express-async-errors"
 import {logger} from "./utils/logger"
 import {MQTT} from "./mqtt"
 
 import {getRoutes} from "./routes"
-import {ApolloServer, gql} from "apollo-server-express"
+import {ApolloServer} from "apollo-server-express"
+import {createSchema} from "./utils/createSchema"
 
 const startServer = async ({port = process.env.PORT} = {}) => {
-  const typeDefs = gql`
-    type Query {
-      hello: String
-    }
-  `
-  // Provide resolver functions for your schema fields
-  const resolvers = {
-    Query: {
-      hello: () => "Hello world!",
-    },
-  }
-
-  const gqlServer = new ApolloServer({typeDefs, resolvers})
+  const gqlServer = new ApolloServer({
+    schema: await createSchema(),
+    context: ({req, res}) => ({
+      req,
+      res,
+    }),
+  })
   await gqlServer.start()
 
   const app = express()
