@@ -3,6 +3,7 @@ import express, {NextFunction, Request, Response} from "express"
 import "express-async-errors"
 import {logger} from "./utils/logger"
 import {MQTT} from "./mqtt"
+import db from "./db/connection"
 
 import {getRoutes} from "./routes"
 import {ApolloServer} from "apollo-server-express"
@@ -14,6 +15,7 @@ const startServer = async ({port = process.env.PORT} = {}) => {
     context: ({req, res}) => ({
       req,
       res,
+      db,
     }),
   })
   await gqlServer.start()
