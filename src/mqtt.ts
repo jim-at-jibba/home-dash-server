@@ -1,14 +1,39 @@
+import {Knex} from "knex"
 import mqtt from "mqtt"
 import {logger} from "../src/utils/logger"
+import {v4 as uuidv4} from "uuid"
 
-export function MQTT() {
+export function MQTT(db: Knex) {
   function init() {
     const client = mqtt.connect("mqtt://192.168.68.106", {clientId: "mqttjs01"})
-    logger.info("connected flag  " + client.connected)
     // handle incoming messages
-    client.on("message", function (topic, message, packet) {
-      logger.info("message is " + message)
+    client.on("message", async function (topic, message, packet) {
+      const x = JSON.parse(message.toString())
       logger.info("topic is " + topic)
+
+      const latest = await db("messages")
+        .first("id", "message")
+        .where("topic", "=", topic)
+        .orderBy("created_at", "desc")
+
+      if (latest != null) {
+        if (topic === "enviro") {
+          const l = JSON.parse(latest.message)
+          if (l.temperature !== x.temperature || l.humidity !== x.humidity) {
+            const id = await db("messages")
+              .insert({id: uuidv4(), topic, message: JSON.stringify(message.toString())})
+              .returning("id")
+
+            logger.info(`Added new message to the DB with ID: ${id}`)
+          }
+        }
+      } else {
+        const id = await db("messages")
+          .insert({id: uuidv4(), topic, message: JSON.stringify(message.toString())})
+          .returning("id")
+
+        logger.info(`Added new message to the DB with ID: ${id}`)
+      }
     })
 
     client.on("connect", function () {
@@ -20,7 +45,7 @@ export function MQTT() {
       process.exit(1)
     })
 
-    client.subscribe("test", {qos: 1})
+    client.subscribe("enviro", {qos: 1})
 
     return client
   }

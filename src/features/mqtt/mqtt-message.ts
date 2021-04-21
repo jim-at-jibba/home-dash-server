@@ -10,9 +10,6 @@ class MqttMessage {
   topic: string
 
   @Field()
-  qos: string
-
-  @Field()
   message: EnviroMessage
 
   @Field({name: "createdAt"})

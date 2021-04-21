@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import {MQTT} from "./mqtt"
-
+import db from "./db/connection"
 import createServer from "./server"
 
 const startServer = async ({port = process.env.PORT} = {}) => {
@@ -10,7 +10,7 @@ const startServer = async ({port = process.env.PORT} = {}) => {
     console.log(`🚀 Listening on port http://localhost:${port}/graphql`)
   })
 
-  MQTT().init()
+  MQTT(db).init()
 }
 
 export {startServer}
