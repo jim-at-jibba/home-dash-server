@@ -1,5 +1,5 @@
 import {Field, ID, ObjectType} from "type-graphql"
-import {EnviroMessage} from "../../types/enviro-message"
+import EnviroMessage from "./enviro-message"
 
 @ObjectType()
 class MqttMessage {
