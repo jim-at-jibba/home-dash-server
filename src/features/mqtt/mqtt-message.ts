@@ -1,22 +1,24 @@
-import {Field, ID, ObjectType} from "type-graphql"
+import {createUnionType} from "type-graphql"
 import EnviroMessage from "./enviro-message"
+import SwitchMessage from "./switch-message"
+import TemperatureMessage from "./temp-message"
 
-@ObjectType()
-class MqttMessage {
-  @Field((type) => ID)
-  id: string
+const MqttMessageUnion = createUnionType({
+  name: "Mqtt",
+  types: () => [EnviroMessage, SwitchMessage, TemperatureMessage] as const,
+  resolveType: (value) => {
+    console.log("VL", value)
+    if (value.topic === "enviro") {
+      return EnviroMessage
+    }
+    if (value.topic === "switch") {
+      return SwitchMessage
+    }
+    if (value.topic === "temperature") {
+      return TemperatureMessage
+    }
+    return undefined
+  },
+})
 
-  @Field()
-  topic: string
-
-  @Field()
-  message: EnviroMessage
-
-  @Field({name: "createdAt"})
-  created_at: Date
-
-  @Field({name: "updatedAt"})
-  updated_at: Date
-}
-
-export default MqttMessage
+export default MqttMessageUnion

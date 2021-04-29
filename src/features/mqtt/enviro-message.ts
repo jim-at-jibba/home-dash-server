@@ -1,7 +1,7 @@
-import {Field, ObjectType} from "type-graphql"
+import {Field, ID, ObjectType} from "type-graphql"
 
 @ObjectType()
-class EnviroMessage {
+class Enviro {
   @Field()
   temperature: number
 
@@ -25,6 +25,24 @@ class EnviroMessage {
 
   @Field({nullable: true})
   serial?: string
+}
+
+@ObjectType()
+class EnviroMessage {
+  @Field((type) => ID)
+  id: string
+
+  @Field()
+  topic: string
+
+  @Field()
+  message: Enviro
+
+  @Field({name: "createdAt"})
+  created_at: Date
+
+  @Field({name: "updatedAt"})
+  updated_at: Date
 }
 
 export default EnviroMessage

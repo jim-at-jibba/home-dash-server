@@ -1,12 +1,15 @@
 import {Arg, Ctx, Query, Resolver} from "type-graphql"
 import {MyContext} from "../../types/my-context"
 import LatestMessageInput from "./latest-message-input"
-import MqttMessage from "./mqtt-message"
+import MqttMessageUnion from "./mqtt-message"
 
 @Resolver()
 class MqttResolver {
-  @Query(() => MqttMessage)
-  async getLatestMessage(@Arg("input") input: LatestMessageInput, @Ctx() ctx: MyContext) {
+  @Query((returns) => MqttMessageUnion)
+  async getLatestMessage(
+    @Arg("input") input: LatestMessageInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<typeof MqttMessageUnion> {
     const {db} = ctx
     const latest = await db("messages").first("*").where("topic", "=", input.topic).orderBy("created_at", "desc")
 
