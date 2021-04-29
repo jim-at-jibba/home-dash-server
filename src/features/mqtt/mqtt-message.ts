@@ -7,7 +7,6 @@ const MqttMessageUnion = createUnionType({
   name: "Mqtt",
   types: () => [EnviroMessage, SwitchMessage, TemperatureMessage] as const,
   resolveType: (value) => {
-    console.log("VL", value)
     if (value.topic === "enviro") {
       return EnviroMessage
     }
