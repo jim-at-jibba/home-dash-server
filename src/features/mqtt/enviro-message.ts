@@ -24,6 +24,15 @@ class Enviro {
   lux?: number
 
   @Field({nullable: true})
+  pm1?: number
+
+  @Field({nullable: true})
+  pm25?: number
+
+  @Field({nullable: true})
+  pm10?: number
+
+  @Field({nullable: true})
   serial?: string
 }
 
