@@ -17,9 +17,16 @@ export function MQTT(db: Knex) {
         .orderBy("created_at", "desc")
 
       if (latest != null) {
-        if (topic === "enviro") {
+        if (topic === "living-room/enviro") {
           const l = JSON.parse(latest.message)
-          if (l.temperature !== x.temperature || l.humidity !== x.humidity) {
+          // is this pointless?
+          if (
+            l.temperature !== x.temperature ||
+            l.humidity !== x.humidity ||
+            l.pm1 !== x.pm1 ||
+            l.pm25 !== x.pm25 ||
+            l.pm10 !== x.pm10
+          ) {
             const id = await db("messages")
               .insert({id: uuidv4(), topic, message: JSON.stringify(message.toString())})
               .returning("id")
@@ -45,7 +52,7 @@ export function MQTT(db: Knex) {
       process.exit(1)
     })
 
-    client.subscribe("enviro", {qos: 1})
+    client.subscribe("living-room/enviro", {qos: 1})
 
     return client
   }
