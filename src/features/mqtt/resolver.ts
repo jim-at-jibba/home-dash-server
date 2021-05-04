@@ -1,7 +1,6 @@
 import {Arg, Ctx, Query, Resolver} from "type-graphql"
 import {MyContext} from "../../types/my-context"
 import LatestAirQualityOutput from "./air-quality-output"
-import EnviroMessage from "./enviro-message"
 import LatestMessageInput from "./latest-message-input"
 import MqttMessageUnion from "./mqtt-message"
 
