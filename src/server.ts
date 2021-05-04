@@ -10,6 +10,8 @@ const createServer = async () => {
     schema: await buildSchema({
       resolvers: [AuthResolver, MqttResolver],
     }),
+    playground: true,
+    introspection: true,
     context: ({req, res}) => {
       return {
         req,
