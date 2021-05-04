@@ -33,10 +33,10 @@ module.exports = {
       max: 10,
     },
     migrations: {
-      directory: "./src/db/migrations",
+      directory: "./dist/src/db/migrations",
     },
     seeds: {
-      directory: "./src/db/seeds",
+      directory: "./dist/src/db/seeds",
     },
   },
   test: {
