@@ -13,10 +13,11 @@ FROM node:12.17.0-alpine
 
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
+ENV PORT=4000
 COPY package*.json ./
 RUN npm install --only=production
 COPY --from=0 /usr/src/app/dist ./dist
 COPY knexfile.js ./dist
-EXPOSE 3000
+EXPOSE 4000
 CMD npm start
 
