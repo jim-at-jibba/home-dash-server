@@ -1,6 +1,6 @@
 import {Knex} from "knex"
 import mqtt from "mqtt"
-import {logger} from "../src/utils/logger"
+import {logger} from "./utils/logger"
 import {v4 as uuidv4} from "uuid"
 
 export function MQTT(db: Knex) {
