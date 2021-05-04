@@ -5,7 +5,7 @@ import {v4 as uuidv4} from "uuid"
 
 export function MQTT(db: Knex) {
   function init() {
-    const client = mqtt.connect("mqtt://192.168.68.106", {clientId: "mqttjs01"})
+    const client = mqtt.connect("mqtt://192.168.68.106", {clientId: `home_server_${process.env.NODE_ENV}`})
     // handle incoming messages
     client.on("message", async function (topic, message, packet) {
       const x = JSON.parse(message.toString())

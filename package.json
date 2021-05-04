@@ -12,7 +12,10 @@
     "check-formatting": "prettier --config .prettierrc.json '**/*.{ts, tsx}' '**/*.{ts, tsx}' --list-different",
     "prettier-format": "prettier --config .prettierrc.json 'src/**/*.{ts, tsx}' '**/*.{ts, tsx}' --write",
     "lint": "npm run lint-src && npm run tsc",
-    "lint-src": "eslint 'src/**' --ext .js,.jsx,.ts,.tsx"
+    "lint-src": "eslint 'src/**' --ext .js,.jsx,.ts,.tsx",
+    "knex:migrate:make": "knex --knexfile ./knexfile.ts -x ts migrate:make",
+    "knex:migrate:latest": "knex --knexfile ./knexfile.ts migrate:latest",
+    "knex:migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback"
   },
   "keywords": [],
   "author": "",

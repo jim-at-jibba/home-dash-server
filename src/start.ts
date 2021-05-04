@@ -4,6 +4,7 @@ import db from "./db/connection"
 import createServer from "./server"
 
 const startServer = async ({port = process.env.PORT} = {}) => {
+  db.migrate.latest({loadExtensions: [".js", ".ts"]})
   const server = await createServer()
 
   server.listen().then(({port}) => {

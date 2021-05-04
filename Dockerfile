@@ -17,7 +17,7 @@ ENV PORT=4000
 COPY package*.json ./
 RUN npm install --only=production
 COPY --from=0 /usr/src/app/dist ./dist
-COPY knexfile.js ./dist
+COPY knexfile.ts ./dist/knexfile.js
 EXPOSE 4000
 CMD npm start
 
