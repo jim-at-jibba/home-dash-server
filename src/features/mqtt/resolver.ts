@@ -19,7 +19,7 @@ class MqttResolver {
       ...latest,
       message: JSON.parse(latest.message),
     }
-    console.log("latest", result)
+
     return result
   }
 
@@ -83,9 +83,13 @@ class MqttResolver {
       .andWhereBetween("created_at", [startDate, new Date()])
       .orderBy("created_at", "desc")
 
-    const result = latest
-    console.log("latest", result.length)
-    console.log(startDate)
+    const result = latest.map((l) => {
+      return {
+        ...l,
+        message: JSON.parse(l.message),
+      }
+    })
+
     return result
   }
 }
