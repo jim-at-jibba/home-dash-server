@@ -1,3 +1,4 @@
+import subDays from "date-fns/subDays"
 import {Arg, Ctx, Query, Resolver} from "type-graphql"
 import {MyContext} from "../../types/my-context"
 import LatestAirQualityOutput from "./air-quality-output"
@@ -66,6 +67,25 @@ class MqttResolver {
       },
     }
 
+    return result
+  }
+
+  @Query((returns) => [MqttMessageUnion])
+  async getLastWeeksMessage(
+    @Arg("input") input: LatestMessageInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<Array<typeof MqttMessageUnion>> {
+    const {db} = ctx
+    const startDate = subDays(new Date(), 7)
+    const latest = await db("messages")
+      .select("*")
+      .where("topic", "=", input.topic)
+      .andWhereBetween("created_at", [startDate, new Date()])
+      .orderBy("created_at", "desc")
+
+    const result = latest
+    console.log("latest", result.length)
+    console.log(startDate)
     return result
   }
 }
