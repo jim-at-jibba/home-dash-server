@@ -2,6 +2,7 @@ import subDays from "date-fns/subDays"
 import {Arg, Ctx, Query, Resolver} from "type-graphql"
 import {MyContext} from "../../types/my-context"
 import LatestAirQualityOutput from "./air-quality-output"
+import LastXDaysMessageInput from "./last-x-days-message-input"
 import LatestMessageInput from "./latest-message-input"
 import MqttMessageUnion from "./mqtt-message"
 
@@ -71,12 +72,12 @@ class MqttResolver {
   }
 
   @Query((returns) => [MqttMessageUnion])
-  async getLastWeeksMessage(
-    @Arg("input") input: LatestMessageInput,
+  async getLastXDaysMessage(
+    @Arg("input") input: LastXDaysMessageInput,
     @Ctx() ctx: MyContext,
   ): Promise<Array<typeof MqttMessageUnion>> {
     const {db} = ctx
-    const startDate = subDays(new Date(), 7)
+    const startDate = subDays(new Date(), input.numberDays)
     const latest = await db("messages")
       .select("*")
       .where("topic", "=", input.topic)
@@ -90,6 +91,7 @@ class MqttResolver {
       }
     })
 
+    console.log(result.length)
     return result
   }
 }
