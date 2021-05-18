@@ -38,18 +38,35 @@ class RecipesResolver {
     const recipe = recipesDetails[0]
 
     return {
-      id: recipe.id,
-      name: recipe.recipe_name,
-      description: recipe.recipe_description,
-      category: recipe.food_category_name,
-      course: recipe.food_course_name,
+      ...recipe,
       ingredients: recipeIngredients,
       steps: recipeSteps,
-      image: recipe.recipe_image,
-      cookTime: recipe.cook_time,
-      prepTime: recipe.prep_time,
-      serves: recipe.serves,
     }
+  }
+
+  @Query((returns) => [Recipes])
+  async getRecipes(@Ctx() ctx: MyContext) {
+    const {db} = ctx
+
+    const recipesDetails = await db("recipes as r")
+      .join("food_courses as courses", "courses.id", "r.food_course_id")
+      .join("food_categories as cats", "cats.id", "r.food_category_id")
+      .select(
+        "r.id",
+        "r.recipe_name",
+        "r.recipe_description",
+        "r.recipe_image",
+        "r.cook_time",
+        "r.prep_time",
+        "r.serves",
+        "cats.food_category_name",
+        "courses.food_course_name",
+      )
+      .orderBy("r.created_at", "desc")
+
+    console.log({recipesDetails})
+
+    return recipesDetails
   }
 }
 

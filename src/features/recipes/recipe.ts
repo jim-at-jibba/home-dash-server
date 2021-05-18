@@ -7,17 +7,17 @@ class Recipes {
   @Field((type) => ID)
   id: string
 
-  @Field()
-  name: string
+  @Field({name: "name"})
+  recipe_name: string
 
-  @Field()
-  course: string
+  @Field({name: "course"})
+  food_course_name: string
 
-  @Field()
-  category: string
+  @Field({name: "category"})
+  food_category_name: string
 
-  @Field()
-  description: string
+  @Field({name: "description"})
+  recipe_description: string
 
   @Field(() => [RecipeIngredients])
   ingredients: [RecipeIngredients]
@@ -25,14 +25,14 @@ class Recipes {
   @Field(() => [RecipeSteps])
   steps: [RecipeSteps]
 
-  @Field({nullable: true})
-  image: string
+  @Field({name: "image", nullable: true})
+  recipe_image: string
 
-  @Field()
-  cookTime: number
+  @Field({name: "cookTime"})
+  cook_time: number
 
-  @Field()
-  prepTime: number
+  @Field({name: "prepTime"})
+  prep_time: number
 
   @Field()
   serves: number
