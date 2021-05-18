@@ -2,13 +2,6 @@
   "folders": [
     {
       "path": "../../.."
-    },
-    {
-      "path": "../../../../home-dash-app"
-    },
-    {
-      "path": "../../../../home-dash-broker"
     }
-  ],
-  "settings": {}
+  ]
 }

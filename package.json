@@ -13,6 +13,7 @@
     "prettier-format": "prettier --config .prettierrc.json 'src/**/*.{ts, tsx}' '**/*.{ts, tsx}' --write",
     "lint": "npm run lint-src && npm run tsc",
     "lint-src": "eslint 'src/**' --ext .js,.jsx,.ts,.tsx",
+    "check-ts-types": "tsc -p ./tsconfig.json --noEmit",
     "knex:migrate:make": "knex --knexfile ./knexfile.ts -x ts migrate:make",
     "knex:migrate:latest": "knex --knexfile ./knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback"
@@ -28,6 +29,7 @@
     "cross-env": "^7.0.3",
     "date-fns": "^2.21.3",
     "dotenv": "^8.2.0",
+    "fit-commit-js": "^0.3.2",
     "graphql": "^15.5.0",
     "jest": "^26.6.3",
     "knex": "^0.95.4",
