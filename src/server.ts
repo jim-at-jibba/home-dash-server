@@ -4,11 +4,12 @@ import {buildSchema} from "type-graphql"
 import AuthResolver from "./features/auth/resolver"
 import db from "./db/connection"
 import MqttResolver from "./features/mqtt/resolver"
+import RecipesResolver from "./features/recipes/resolver"
 
 const createServer = async () => {
   return new ApolloServer({
     schema: await buildSchema({
-      resolvers: [AuthResolver, MqttResolver],
+      resolvers: [AuthResolver, MqttResolver, RecipesResolver],
     }),
     playground: true,
     introspection: true,

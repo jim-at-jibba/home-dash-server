@@ -8,8 +8,6 @@ export async function up(knex: Knex): Promise<void> {
     t.string("step_description").notNullable()
     t.timestamps(false, true)
 
-    t.unique(["recipe_id"])
-
     t.foreign("recipe_id").references("id").inTable("recipes")
   })
 }
