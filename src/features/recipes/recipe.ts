@@ -3,7 +3,7 @@ import RecipeIngredients from "./recipe-ingredients"
 import RecipeSteps from "./recipe-steps"
 
 @ObjectType()
-class Recipes {
+class Recipe {
   @Field((type) => ID)
   id: string
 
@@ -38,4 +38,4 @@ class Recipes {
   serves: number
 }
 
-export default Recipes
+export default Recipe

@@ -1,7 +1,7 @@
 import {Arg, Ctx, Mutation, Query, Resolver} from "type-graphql"
 import {MyContext} from "../../types/my-context"
 import GetRecipeByIdInput from "./get-recipe-by-id-input"
-import Recipes from "./recipe"
+import Recipe from "./recipe"
 import RecipeIngredients from "./recipe-ingredients"
 import RecipeInput from "./recipe-input"
 import RecipeSteps from "./recipe-steps"
@@ -10,8 +10,8 @@ import {logger} from "../../utils/logger"
 
 @Resolver()
 class RecipesResolver {
-  @Query((returns) => Recipes)
-  async getRecipeById(@Arg("input") input: GetRecipeByIdInput, @Ctx() ctx: MyContext): Promise<Recipes> {
+  @Query((returns) => Recipe)
+  async getRecipeById(@Arg("input") input: GetRecipeByIdInput, @Ctx() ctx: MyContext): Promise<Recipe> {
     const {db} = ctx
 
     const recipesDetails = await db("recipes as r")
@@ -47,8 +47,8 @@ class RecipesResolver {
     }
   }
 
-  @Query((returns) => [Recipes])
-  async getRecipes(@Ctx() ctx: MyContext) {
+  @Query((returns) => [Recipe])
+  async getRecipes(@Ctx() ctx: MyContext): Promise<[Recipe]> {
     const {db} = ctx
 
     const recipesDetails = await db("recipes as r")
@@ -69,10 +69,10 @@ class RecipesResolver {
 
     logger.info({recipesDetails})
 
-    return recipesDetails
+    return recipesDetails as [Recipe]
   }
 
-  @Mutation((returns) => Recipes)
+  @Mutation((returns) => Recipe)
   async createRecipe(@Arg("input") input: RecipeInput, @Ctx() ctx: MyContext) {
     console.log({input})
     const {db} = ctx
