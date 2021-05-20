@@ -25,8 +25,8 @@ class RecipeFull {
   @Field(() => [RecipeSteps])
   steps: [RecipeSteps]
 
-  @Field({name: "image", nullable: true})
-  recipe_image: string
+  @Field({name: "image"})
+  recipe_image?: string
 
   @Field({name: "cookTime"})
   cook_time: number

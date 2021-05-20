@@ -17,8 +17,8 @@ class RecipeDetails {
   @Field({name: "description"})
   recipe_description: string
 
-  @Field({name: "image", nullable: true})
-  recipe_image: string
+  @Field({name: "image"})
+  recipe_image?: string
 
   @Field({name: "cookTime"})
   cook_time: number
