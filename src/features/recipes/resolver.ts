@@ -77,6 +77,22 @@ class RecipesResolver {
     return recipesDetails as [RecipeDetails]
   }
 
+  @Query((returns) => [RecipeSteps])
+  async getRecipeStepsByRecipeId(
+    @Arg("input") input: GetRecipeByIdInput,
+    @Ctx() ctx: MyContext,
+  ): Promise<[RecipeSteps]> {
+    const {db} = ctx
+
+    console.log("WHAT")
+
+    const recipeSteps = (await db("recipe_steps").select("*").where("recipe_id", "=", input.id)) as [RecipeSteps]
+
+    logger.info(recipeSteps)
+
+    return recipeSteps
+  }
+
   @Mutation((returns) => RecipeFull)
   async createRecipe(@Arg("input") input: RecipeInput, @Ctx() ctx: MyContext) {
     console.log({input})
