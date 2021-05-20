@@ -1,9 +1,7 @@
 import {Field, ID, ObjectType} from "type-graphql"
-import RecipeIngredients from "./recipe-ingredients"
-import RecipeSteps from "./recipe-steps"
 
 @ObjectType()
-class RecipeFull {
+class RecipeDetails {
   @Field((type) => ID)
   id: string
 
@@ -18,12 +16,6 @@ class RecipeFull {
 
   @Field({name: "description"})
   recipe_description: string
-
-  @Field(() => [RecipeIngredients])
-  ingredients: [RecipeIngredients]
-
-  @Field(() => [RecipeSteps])
-  steps: [RecipeSteps]
 
   @Field({name: "image", nullable: true})
   recipe_image: string
@@ -44,4 +36,4 @@ class RecipeFull {
   updated_at: Date
 }
 
-export default RecipeFull
+export default RecipeDetails

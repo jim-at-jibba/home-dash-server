@@ -1,17 +1,18 @@
 import {Arg, Ctx, Mutation, Query, Resolver} from "type-graphql"
 import {MyContext} from "../../types/my-context"
 import GetRecipeByIdInput from "./get-recipe-by-id-input"
-import Recipe from "./recipe"
 import RecipeIngredients from "./recipe-ingredients"
 import RecipeInput from "./recipe-input"
 import RecipeSteps from "./recipe-steps"
 import {v4 as uuidv4} from "uuid"
 import {logger} from "../../utils/logger"
+import RecipeDetails from "./recipe-details"
+import RecipeFull from "./recipe"
 
 @Resolver()
 class RecipesResolver {
-  @Query((returns) => Recipe)
-  async getRecipeById(@Arg("input") input: GetRecipeByIdInput, @Ctx() ctx: MyContext): Promise<Recipe> {
+  @Query((returns) => RecipeFull)
+  async getRecipeById(@Arg("input") input: GetRecipeByIdInput, @Ctx() ctx: MyContext): Promise<RecipeFull> {
     const {db} = ctx
 
     const recipesDetails = await db("recipes as r")
@@ -25,6 +26,8 @@ class RecipesResolver {
         "r.cook_time",
         "r.prep_time",
         "r.serves",
+        "r.created_at",
+        "r.updated_at",
         "cats.food_category_name",
         "courses.food_course_name",
       )
@@ -47,8 +50,8 @@ class RecipesResolver {
     }
   }
 
-  @Query((returns) => [Recipe])
-  async getRecipes(@Ctx() ctx: MyContext): Promise<[Recipe]> {
+  @Query((returns) => [RecipeDetails])
+  async getRecipes(@Ctx() ctx: MyContext): Promise<[RecipeDetails]> {
     const {db} = ctx
 
     const recipesDetails = await db("recipes as r")
@@ -62,6 +65,8 @@ class RecipesResolver {
         "r.cook_time",
         "r.prep_time",
         "r.serves",
+        "r.created_at",
+        "r.updated_at",
         "cats.food_category_name",
         "courses.food_course_name",
       )
@@ -69,10 +74,10 @@ class RecipesResolver {
 
     logger.info({recipesDetails})
 
-    return recipesDetails as [Recipe]
+    return recipesDetails as [RecipeDetails]
   }
 
-  @Mutation((returns) => Recipe)
+  @Mutation((returns) => RecipeFull)
   async createRecipe(@Arg("input") input: RecipeInput, @Ctx() ctx: MyContext) {
     console.log({input})
     const {db} = ctx
@@ -132,6 +137,8 @@ class RecipesResolver {
           "r.cook_time",
           "r.prep_time",
           "r.serves",
+          "r.created_at",
+          "r.updated_at",
           "cats.food_category_name",
           "courses.food_course_name",
         )
