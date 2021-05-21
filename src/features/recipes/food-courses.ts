@@ -5,8 +5,8 @@ class FoodCourses {
   @Field((type) => ID)
   id: string
 
-  @Field()
-  name: string
+  @Field({name: "name"})
+  food_course_name: string
 
   @Field({name: "createdAt"})
   created_at: Date

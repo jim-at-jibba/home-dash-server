@@ -9,7 +9,9 @@ import {logger} from "../../utils/logger"
 import RecipeDetails from "./recipe-details"
 import RecipeFull from "./recipe"
 import FoodCategories from "./food-categories"
-import FoodCategoryInput from "./FoodCategoryInput"
+import FoodCategoryInput from "./food-category-input"
+import FoodCourses from "./food-courses"
+import FoodCourseInput from "./food-course-input"
 
 @Resolver()
 class RecipesResolver {
@@ -193,9 +195,26 @@ class RecipesResolver {
         "*",
       )
 
-      console.log("category", category)
-
       return category[0]
+    } catch (error) {
+      logger.error(error)
+    }
+  }
+
+  @Mutation((returns) => FoodCourses)
+  async createFoodCourse(@Arg("input") input: FoodCourseInput, @Ctx() ctx: MyContext) {
+    const {db} = ctx
+
+    try {
+      const courses = await db("food_courses").insert(
+        {
+          id: uuidv4(),
+          food_course_name: input.name,
+        },
+        "*",
+      )
+
+      return courses[0]
     } catch (error) {
       logger.error(error)
     }
