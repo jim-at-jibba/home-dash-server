@@ -8,6 +8,8 @@ import {v4 as uuidv4} from "uuid"
 import {logger} from "../../utils/logger"
 import RecipeDetails from "./recipe-details"
 import RecipeFull from "./recipe"
+import FoodCategories from "./food-categories"
+import FoodCategoryInput from "./FoodCategoryInput"
 
 @Resolver()
 class RecipesResolver {
@@ -174,8 +176,27 @@ class RecipesResolver {
         steps: recipeSteps,
       }
     } catch (error) {
-      // If we get here, that means that neither the 'Old Books' catalogues insert,
-      // nor any of the books inserts will have taken place.
+      logger.error(error)
+    }
+  }
+
+  @Mutation((returns) => FoodCategories)
+  async createFoodCategory(@Arg("input") input: FoodCategoryInput, @Ctx() ctx: MyContext) {
+    const {db} = ctx
+
+    try {
+      const category = await db("food_categories").insert(
+        {
+          id: uuidv4(),
+          food_category_name: input.name,
+        },
+        "*",
+      )
+
+      console.log("category", category)
+
+      return category[0]
+    } catch (error) {
       logger.error(error)
     }
   }
