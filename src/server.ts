@@ -5,11 +5,12 @@ import AuthResolver from "./features/auth/resolver"
 import db from "./db/connection"
 import MqttResolver from "./features/mqtt/resolver"
 import RecipesResolver from "./features/recipes/resolver"
+import {ImageResolver} from "./features/images/resolver"
 
 const createServer = async () => {
   return new ApolloServer({
     schema: await buildSchema({
-      resolvers: [AuthResolver, MqttResolver, RecipesResolver],
+      resolvers: [AuthResolver, MqttResolver, RecipesResolver, ImageResolver],
     }),
     playground: true,
     introspection: true,
