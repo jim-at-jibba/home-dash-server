@@ -97,6 +97,19 @@ class RecipesResolver {
     return recipeSteps
   }
 
+  @Query((returns) => [FoodCategories])
+  async getFoodCategory(@Ctx() ctx: MyContext): Promise<[FoodCategories]> {
+    const {db} = ctx
+
+    console.log("WHAT")
+
+    const FoodCategories = (await db("food_categories").select("*")) as [FoodCategories]
+
+    logger.info(FoodCategories)
+
+    return FoodCategories
+  }
+
   @Mutation((returns) => RecipeFull)
   async createRecipe(@Arg("input") input: RecipeInput, @Ctx() ctx: MyContext) {
     console.log({input})
