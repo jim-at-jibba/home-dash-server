@@ -8,8 +8,8 @@ class CreateBBCRecipeInput {
   @Field()
   courseId: string
 
-  @Field()
-  categoryId: string
+  @Field(() => [String])
+  categoryIds: [string]
 
   @Field()
   recipeImage: string

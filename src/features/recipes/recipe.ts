@@ -13,8 +13,8 @@ class RecipeFull {
   @Field({name: "course"})
   food_course_name: string
 
-  @Field({name: "category"})
-  food_category_name: string
+  @Field(() => [String], {name: "categories"})
+  food_category_names: [string]
 
   @Field({name: "description"})
   recipe_description: string

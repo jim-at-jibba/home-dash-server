@@ -2,7 +2,7 @@ import {InputType, Field} from "type-graphql"
 
 @InputType()
 class FoodCategoryInput {
-  @Field()
+  @Field(() => String)
   name: string
 }
 

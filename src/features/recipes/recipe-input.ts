@@ -23,8 +23,8 @@ class RecipeInput {
   @Field()
   courseId: string
 
-  @Field()
-  categoryId: string
+  @Field(() => [String])
+  categoryIds: [string]
 
   @Field()
   description: string

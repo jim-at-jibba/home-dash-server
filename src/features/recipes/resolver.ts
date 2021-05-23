@@ -24,7 +24,7 @@ class RecipesResolver {
 
     const recipesDetails = await db("recipes as r")
       .join("food_courses as courses", "courses.id", "r.food_course_id")
-      .join("food_categories as cats", "cats.id", "r.food_category_id")
+      .join(db.raw("food_categories as c on c.id = ANY(food_category_ids)"))
       .select(
         "r.id",
         "r.recipe_name",
@@ -35,9 +35,10 @@ class RecipesResolver {
         "r.serves",
         "r.created_at",
         "r.updated_at",
-        "cats.food_category_name",
+        db.raw("ARRAY_AGG(c.food_category_name) as food_category_names"),
         "courses.food_course_name",
       )
+      .groupBy("r.id", "courses.food_course_name")
       .where("r.id", "=", input.id)
 
     const recipeIngredients = (await db("recipe_ingredients").select("*").where("recipe_id", "=", input.id)) as [
@@ -48,6 +49,7 @@ class RecipesResolver {
 
     console.log({recipesDetails, recipeIngredients, recipeSteps})
 
+    // @ts-ignore
     const recipe = recipesDetails[0]
 
     return {
@@ -60,10 +62,9 @@ class RecipesResolver {
   @Query((returns) => [RecipeDetails])
   async getRecipes(@Ctx() ctx: MyContext): Promise<[RecipeDetails]> {
     const {db} = ctx
-
     const recipesDetails = await db("recipes as r")
       .join("food_courses as courses", "courses.id", "r.food_course_id")
-      .join("food_categories as cats", "cats.id", "r.food_category_id")
+      .join(db.raw("food_categories as c on c.id = ANY(food_category_ids)"))
       .select(
         "r.id",
         "r.recipe_name",
@@ -74,10 +75,11 @@ class RecipesResolver {
         "r.serves",
         "r.created_at",
         "r.updated_at",
-        "cats.food_category_name",
+        db.raw("ARRAY_AGG(c.food_category_name) as food_category_names"),
         "courses.food_course_name",
       )
       .orderBy("r.created_at", "desc")
+      .groupBy("r.id", "courses.food_course_name")
 
     logger.info({recipesDetails})
 
@@ -101,7 +103,7 @@ class RecipesResolver {
   }
 
   @Query((returns) => [FoodCategories])
-  async getFoodCategory(@Ctx() ctx: MyContext): Promise<[FoodCategories]> {
+  async getFoodCategories(@Ctx() ctx: MyContext): Promise<[FoodCategories]> {
     const {db} = ctx
 
     console.log("WHAT")
@@ -140,7 +142,7 @@ class RecipesResolver {
             recipe_name: recipe.name,
             recipe_description: recipe.description,
             food_course_id: recipe.courseId,
-            food_category_id: recipe.categoryId,
+            food_category_ids: recipe.categoryIds,
             recipe_image: recipe.recipeImage,
             prep_time: recipe.prepTime,
             cook_time: recipe.cookTime,
@@ -177,7 +179,7 @@ class RecipesResolver {
 
       const recipesDetails = await db("recipes as r")
         .join("food_courses as courses", "courses.id", "r.food_course_id")
-        .join("food_categories as cats", "cats.id", "r.food_category_id")
+        .join(db.raw("food_categories as c on c.id = ANY(food_category_ids)"))
         .select(
           "r.id",
           "r.recipe_name",
@@ -188,9 +190,10 @@ class RecipesResolver {
           "r.serves",
           "r.created_at",
           "r.updated_at",
-          "cats.food_category_name",
+          db.raw("ARRAY_AGG(c.food_category_name) as food_category_names"),
           "courses.food_course_name",
         )
+        .groupBy("r.id", "courses.food_course_name")
         .where("r.id", "=", newRecipeId)
 
       const recipeIngredients = (await db("recipe_ingredients").select("*").where("recipe_id", "=", newRecipeId)) as [
@@ -266,7 +269,7 @@ class RecipesResolver {
             recipe_name: recipe.recipe_name,
             recipe_description: recipe.recipe_description,
             food_course_id: input.courseId,
-            food_category_id: input.categoryId,
+            food_category_ids: input.categoryIds,
             recipe_image: input.recipeImage,
             prep_time: parseInt(recipe.prep_time),
             cook_time: parseInt(recipe.cook_time),
