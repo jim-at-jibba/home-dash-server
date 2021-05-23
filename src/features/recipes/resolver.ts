@@ -12,6 +12,9 @@ import FoodCategories from "./food-categories"
 import FoodCategoryInput from "./food-category-input"
 import FoodCourses from "./food-courses"
 import FoodCourseInput from "./food-course-input"
+import CreateRecipeUrlInput from "./create-recipe-url-input"
+import {bbcScraper} from "./scrapers/bbc-good-food"
+import CreateRecipeOutput from "./recipe-output"
 
 @Resolver()
 class RecipesResolver {
@@ -241,6 +244,65 @@ class RecipesResolver {
       )
 
       return courses[0]
+    } catch (error) {
+      logger.error(error)
+    }
+  }
+
+  @Mutation((returns) => CreateRecipeOutput)
+  async createRecipeFromUrl(@Arg("input") input: CreateRecipeUrlInput, @Ctx() ctx: MyContext) {
+    const {db} = ctx
+    try {
+      const scrappedRecipe = await bbcScraper(input.url)
+      console.log({scrappedRecipe})
+      if (scrappedRecipe == null) {
+        return
+      }
+      const {ingredients, steps, categories, ...recipe} = scrappedRecipe
+      // TODO: figure out how to use cats from recipe
+      const catId = db("food_categories").first("id")
+      const courseId = db("food_courses").first("id")
+      const newRecipeId = await db.transaction(async (trx) => {
+        const ids = await trx("recipes").insert(
+          {
+            id: uuidv4(),
+            recipe_name: recipe.recipe_name,
+            recipe_description: recipe.recipe_description,
+            food_course_id: courseId,
+            food_category_id: catId,
+            recipe_image: "",
+            prep_time: parseInt(recipe.prep_time),
+            cook_time: parseInt(recipe.cook_time),
+            serves: parseInt(recipe.serves),
+          },
+          "id",
+        )
+
+        const completeIngredients = ingredients.map((ingredient) => ({
+          id: uuidv4(),
+          recipe_id: ids[0],
+          ingredient,
+        }))
+
+        const completeSteps = steps.map((step, i) => ({
+          id: uuidv4(),
+          recipe_id: ids[0],
+          step_number: i,
+          step_description: step,
+        }))
+
+        const ingredientInserts = await trx("recipe_ingredients").insert(completeIngredients, "id")
+        const stepInserts = await trx("recipe_steps").insert(completeSteps, "id")
+
+        console.log(ingredientInserts.length + " new ingredients saved.")
+        console.log(stepInserts.length + " new steps saved.")
+
+        return ids[0]
+      })
+
+      return {
+        id: newRecipeId,
+      }
     } catch (error) {
       logger.error(error)
     }
