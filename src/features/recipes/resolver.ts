@@ -12,9 +12,9 @@ import FoodCategories from "./food-categories"
 import FoodCategoryInput from "./food-category-input"
 import FoodCourses from "./food-courses"
 import FoodCourseInput from "./food-course-input"
-import CreateRecipeUrlInput from "./create-recipe-url-input"
 import {bbcScraper} from "./scrapers/bbc-good-food"
 import CreateRecipeOutput from "./recipe-output"
+import CreateBBCRecipeInput from "./create-bbc-recipe-input"
 
 @Resolver()
 class RecipesResolver {
@@ -250,7 +250,7 @@ class RecipesResolver {
   }
 
   @Mutation((returns) => CreateRecipeOutput)
-  async createRecipeFromUrl(@Arg("input") input: CreateRecipeUrlInput, @Ctx() ctx: MyContext) {
+  async createRecipeFromBBC(@Arg("input") input: CreateBBCRecipeInput, @Ctx() ctx: MyContext) {
     const {db} = ctx
     try {
       const scrappedRecipe = await bbcScraper(input.url)
@@ -259,18 +259,15 @@ class RecipesResolver {
         return
       }
       const {ingredients, steps, categories, ...recipe} = scrappedRecipe
-      // TODO: figure out how to use cats from recipe
-      const catId = db("food_categories").first("id")
-      const courseId = db("food_courses").first("id")
       const newRecipeId = await db.transaction(async (trx) => {
         const ids = await trx("recipes").insert(
           {
             id: uuidv4(),
             recipe_name: recipe.recipe_name,
             recipe_description: recipe.recipe_description,
-            food_course_id: courseId,
-            food_category_id: catId,
-            recipe_image: "",
+            food_course_id: input.courseId,
+            food_category_id: input.categoryId,
+            recipe_image: input.recipeImage,
             prep_time: parseInt(recipe.prep_time),
             cook_time: parseInt(recipe.cook_time),
             serves: parseInt(recipe.serves),
