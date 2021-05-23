@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("recipes", (t) => {
     t.uuid("id").unique().primary()
     t.uuid("food_course_id").notNullable()
-    t.uuid("food_category_id").notNullable()
+    t.specificType("food_category_id", "uuid ARRAY").notNullable()
     t.string("recipe_name").notNullable()
     t.string("recipe_description").notNullable()
     t.string("recipe_image")
@@ -14,7 +14,6 @@ export async function up(knex: Knex): Promise<void> {
     t.timestamps(false, true)
 
     t.foreign("food_course_id").references("id").inTable("food_courses")
-    t.foreign("food_category_id").references("id").inTable("food_categories")
   })
 }
 
