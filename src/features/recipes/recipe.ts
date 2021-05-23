@@ -37,6 +37,9 @@ class RecipeFull {
   @Field()
   serves: number
 
+  @Field({name: "recipeUrl", nullable: true})
+  recipe_url: string
+
   @Field({name: "createdAt"})
   created_at: Date
 

@@ -274,6 +274,7 @@ class RecipesResolver {
             prep_time: parseInt(recipe.prep_time),
             cook_time: parseInt(recipe.cook_time),
             serves: parseInt(recipe.serves),
+            recipe_url: input.url,
           },
           "id",
         )
