@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("recipes", (t) => {
     t.uuid("id").unique().primary()
     t.uuid("food_course_id").notNullable()
-    t.specificType("food_category_id", "uuid ARRAY").notNullable()
+    t.specificType("food_category_ids", "uuid ARRAY").notNullable()
     t.string("recipe_name").notNullable()
     t.string("recipe_description").notNullable()
     t.string("recipe_image")
