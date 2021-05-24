@@ -18,6 +18,7 @@ COPY package*.json ./
 RUN npm install --only=production
 COPY --from=0 /usr/src/app/dist ./dist
 COPY knexfile.ts ./dist/knexfile.js
+COPY .env .env
 EXPOSE 4000
 CMD npm start
 
