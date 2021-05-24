@@ -35,7 +35,7 @@ export async function bbcScraper(url: string): Promise<ScrappedRecipe | null> {
       const ingredientsContainer = $(".recipe__ingredients > section:nth-child(2) > ul:nth-child(1)").children()
       const ingredients = []
       for (let i = 0; i < ingredientsContainer.length; i++) {
-        const ingredientText = $(ingredientsContainer[i]).next().text()
+        const ingredientText = $(ingredientsContainer[i]).text()
         ingredients.push(ingredientText)
       }
 
