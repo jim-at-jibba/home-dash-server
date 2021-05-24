@@ -6,8 +6,6 @@ const cloudinary = require("cloudinary").v2
 export class ImageResolver {
   @Mutation((_returns) => ImageSignature)
   createImageSignature(): ImageSignature {
-    console.log("process.env.CLOUDINARY_SECRET", process.env.CLOUDINARY_SECRET)
-
     const timestamp = Math.round(new Date().getTime() / 1000)
     const signature: string = cloudinary.utils.api_sign_request(
       {
