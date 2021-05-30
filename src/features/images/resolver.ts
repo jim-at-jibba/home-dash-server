@@ -1,5 +1,6 @@
 import {Resolver, Mutation} from "type-graphql"
 import ImageSignature from "./images"
+import {CLOUDINARY_SECRET} from "../../config/config"
 const cloudinary = require("cloudinary").v2
 
 @Resolver()
@@ -11,7 +12,7 @@ export class ImageResolver {
       {
         timestamp,
       },
-      process.env.CLOUDINARY_SECRET,
+      CLOUDINARY_SECRET,
     )
     return {timestamp, signature}
   }

@@ -11,6 +11,12 @@ class User {
   @Field()
   email: string
 
+  @Field({name: "displayName"})
+  display_name: string
+
+  @Field()
+  avatar?: string
+
   password: string
 
   @Field({name: "createdAt"})
