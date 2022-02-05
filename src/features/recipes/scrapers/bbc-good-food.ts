@@ -17,7 +17,7 @@ export async function bbcScraper(url: string): Promise<ScrappedRecipe | null> {
     .then((response) => {
       const $ = cheerio.load(response.body)
       // @ts-ignore
-      const recipe_name = $(".post-header__title")[0].children[0].data as string
+      const recipe_name = $(".post-header__title").children().text()
       const recipe_description = $(".post-header__body").find(".editor-content").children().text()
       const prep_time = $("li.body-copy-small:nth-child(1) > span:nth-child(2) > time:nth-child(1)")
         .text()
