@@ -40,6 +40,9 @@ class RecipeFull {
   @Field({name: "recipeUrl", nullable: true})
   recipe_url: string
 
+  @Field({name: "recipeNotes", nullable: true})
+  recipe_notes: string
+
   @Field({name: "createdAt"})
   created_at: Date
 

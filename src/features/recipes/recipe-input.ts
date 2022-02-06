@@ -46,6 +46,12 @@ class RecipeInput {
 
   @Field()
   serves: number
+
+  @Field()
+  recipeNotes: string
+
+  @Field()
+  recipeUrl: string
 }
 
 export default RecipeInput

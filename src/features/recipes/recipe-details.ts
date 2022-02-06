@@ -29,6 +29,12 @@ class RecipeDetails {
   @Field()
   serves: number
 
+  @Field({name: "receipeNotes"})
+  recipe_notes: string
+
+  @Field({name: "receipeUrl"})
+  recipe_url: string
+
   @Field({name: "createdAt"})
   created_at: Date
 
